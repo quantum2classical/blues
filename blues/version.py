@@ -37,7 +37,7 @@ and outputs an accurate InChI or SMILES string.
 
 License
 =======
-``mdstates`` is licensed under the terms of the MIT license. See the file
+``blues`` is licensed under the terms of the MIT license. See the file
 "LICENSE" for information on the history of this software, terms & conditions
 for usage, and a DISCLAIMER OF ALL WARRANTIES.
 
@@ -62,5 +62,5 @@ MAJOR = _version_major
 MINOR = _version_minor
 MICRO = _version_micro
 VERSION = __version__
-PACKAGE_DATA = {'mdstates': [pjoin('data', '*')]}
+PACKAGE_DATA = {'blues': [pjoin('data', '*')]}
 REQUIRES = ['numpy']
