@@ -1,0 +1,7 @@
+name: blues
+channels:
+  - rdkit
+  - conda-forge
+dependencies:
+  - rdkit
+  - numpy
