@@ -4,7 +4,7 @@ import numpy as np
 from rdkit import Chem
 from rdkit.Chem import AllChem, Draw
 
-def order_atoms(filename='atom_list.txt'):
+def order_atoms(filename):
     """list out the txt file containing all atoms in the molecule, order the same as JANPA output and eliminate whitespace"""
     with open(filename) as f:
         atoms = f.readlines()
