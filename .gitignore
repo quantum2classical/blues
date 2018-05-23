@@ -102,3 +102,6 @@ ENV/
 
 # Development
 development/
+
+# pytest cache
+.pytest_cache/
