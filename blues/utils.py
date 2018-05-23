@@ -32,5 +32,24 @@ def get_directory(directory):
 
 
 def file_path(filename, directory):
+    """Retrieves absolute path to specified file in a directory.
 
-    return join(get_directory(directory), filename)
+    Parameters
+    ----------
+    filename : str
+    directory : str
+
+    Returns
+    -------
+    full_path : str
+    """
+
+    full_dirname = get_directory(directory)
+    full_path = join(full_dirname, filename)
+
+    if not os.path.exists(full_path):
+        raise OSError(f"{full_path} does not exist.")
+    else:
+        pass
+
+    return full_path
