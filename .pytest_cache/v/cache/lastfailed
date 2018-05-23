@@ -1,6 +1,1 @@
-{
-  "blues/tests/test_buildmol.py": true,
-  "blues/tests/test_buildmol.py::test_add_atoms": true,
-  "blues/tests/test_buildmol.py::test_build_molecule": true,
-  "blues/tests/test_buildmol.py::test_order_atoms": true
-}
+{}
