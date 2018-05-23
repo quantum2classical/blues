@@ -29,7 +29,7 @@ def run_janpa(molden_file, wiberg_file='wiberg.dat', delete_wiberg_file=False):
     else:
         pass
 
-    janpa_path = file_path('JANPA.jar', 'janpa')
+    janpa_path = file_path('janpa.jar', 'janpa')
 
     retcode = call(['java', '-jar', janpa_path, '-i', molden_file,
                     '-ignoreFock', '-WibergBondOrders_File', wiberg_file],
