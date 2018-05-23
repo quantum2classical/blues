@@ -2,6 +2,7 @@ import numpy as np
 
 from ..runjanpa import run_janpa, get_bond_orders, parse_atom_list,\
     parse_bond_orders
+from ..utils import file_path
 
 
 def test_run_janpa():
@@ -18,9 +19,10 @@ def test_run_janpa():
         pass
     else:
         raise Exception("Function executed with numerical argument.")
-        
 
-    atoms, bonds = run_janpa('tests/test_files/test.molden')
+    test_molden_file = file_path('test_files/test.molden', 'tests')
+
+    atoms, bonds = run_janpa(test_molden_file, delete_wiberg_file=True)
 
     real_atoms = ['C', 'C', 'C', 'C', 'C', 'C', 'H', 'C', 'H', 'H', 'H',
                   'C', 'C', 'H', 'H', 'H', 'C', 'H', 'C', 'H', 'C', 'H',
@@ -33,9 +35,11 @@ def test_run_janpa():
     triple_bond = (np.array([7]), np.array([11]))
 
     assert atoms == real_atoms, "Incorrect atoms extracted."
-    assert np.where(np.isclose(bonds, 1.5), atol=0.25) == aromatic_bonds
-    assert np.where(np.isclose(bonds, 2.0), atol=0.25) == double_bond
-    assert np.where(np.isclose(bonds, 3.0), atol=0.25) == triple_bond
+    aromatic_id = np.where(np.isclose(bonds, 1.5, atol=0.20))
+    assert np.all(aromatic_id[0] == aromatic_bonds[0])
+    assert np.all(aromatic_id[1] == aromatic_bonds[1])
+    assert np.where(np.isclose(bonds, 2.0, atol=0.30)) == double_bond
+    assert np.where(np.isclose(bonds, 3.0, atol=0.30)) == triple_bond
 
     return
 
@@ -56,7 +60,8 @@ def test_get_bond_orders():
     else:
         raise Exception("Function executed with numerical argument.")
 
-    atoms, bonds = get_bond_orders('tests/test_files/wiberg.txt')
+    test_wiberg_file = file_path("test_files/wiberg.txt", 'tests')
+    atoms, bonds = get_bond_orders(test_wiberg_file)
 
     real_atoms = ['C', 'C', 'C', 'C', 'C', 'C', 'H', 'C', 'H', 'H', 'H',
                   'C', 'C', 'H', 'H', 'H', 'C', 'H', 'C', 'H', 'C', 'H',
@@ -69,9 +74,11 @@ def test_get_bond_orders():
     triple_bond = (np.array([7]), np.array([11]))
 
     assert atoms == real_atoms, "Incorrect atoms extracted."
-    assert np.where(np.isclose(bonds, 1.5), atol=0.25) == aromatic_bonds
-    assert np.where(np.isclose(bonds, 2.0), atol=0.25) == double_bond
-    assert np.where(np.isclose(bonds, 3.0), atol=0.25) == triple_bond
+    aromatic_id = np.where(np.isclose(bonds, 1.5, atol=0.20))
+    assert np.all(aromatic_id[0] == aromatic_bonds[0])
+    assert np.all(aromatic_id[1] == aromatic_bonds[1])
+    assert np.where(np.isclose(bonds, 2.0, atol=0.30)) == double_bond
+    assert np.where(np.isclose(bonds, 3.0, atol=0.30)) == triple_bond
 
     return
 
