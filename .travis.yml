@@ -1,8 +1,8 @@
-languages: 
+language: 
    - python
-   - java
+#   - java
 
-jdk: oraclejdk8
+# jdk: oraclejdk8
 
 python:
    - 3.6
