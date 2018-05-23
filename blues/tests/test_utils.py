@@ -7,14 +7,14 @@ def test_get_directory():
 
     # Test bad input
     try:
-        _ = get_directory("fake_dir")
+        _ = get_directory("fake_dir")  # noqa
     except(OSError):
         pass
     else:
         raise Exception("Fake directory name was accepted.")
 
     try:
-        _ = get_directory(1234)
+        _ = get_directory(1234)  # noqa
     except(TypeError):
         pass
     else:
