@@ -5,11 +5,73 @@ from ..runjanpa import run_janpa, get_bond_orders, parse_atom_list,\
 
 
 def test_run_janpa():
+    try:
+        run_janpa('fake.molden')
+    except(OSError):
+        pass
+    else:
+        raise Exception("Function executed with nonexistent input file.")
+
+    try:
+        run_janpa(1234)
+    except(TypeError):
+        pass
+    else:
+        raise Exception("Function executed with numerical argument.")
+        
+
+    atoms, bonds = run_janpa('tests/test_files/test.molden')
+
+    real_atoms = ['C', 'C', 'C', 'C', 'C', 'C', 'H', 'C', 'H', 'H', 'H',
+                  'C', 'C', 'H', 'H', 'H', 'C', 'H', 'C', 'H', 'C', 'H',
+                  'H', 'H']
+
+    aromatic_bonds = (np.array([0, 0, 1, 2, 3, 4]),
+                      np.array([1, 2, 3, 5, 4, 5]))
+
+    double_bond = (np.array([18]), np.array([20]))
+    triple_bond = (np.array([7]), np.array([11]))
+
+    assert atoms == real_atoms, "Incorrect atoms extracted."
+    assert np.where(np.isclose(bonds, 1.5), atol=0.25) == aromatic_bonds
+    assert np.where(np.isclose(bonds, 2.0), atol=0.25) == double_bond
+    assert np.where(np.isclose(bonds, 3.0), atol=0.25) == triple_bond
 
     return
 
 
 def test_get_bond_orders():
+
+    try:
+        get_bond_orders('fake.txt')
+    except(OSError):
+        pass
+    else:
+        raise Exception("Function executed with nonexistent input file.")
+
+    try:
+        get_bond_orders(1234)
+    except(TypeError):
+        pass
+    else:
+        raise Exception("Function executed with numerical argument.")
+
+    atoms, bonds = get_bond_orders('tests/test_files/wiberg.txt')
+
+    real_atoms = ['C', 'C', 'C', 'C', 'C', 'C', 'H', 'C', 'H', 'H', 'H',
+                  'C', 'C', 'H', 'H', 'H', 'C', 'H', 'C', 'H', 'C', 'H',
+                  'H', 'H']
+
+    aromatic_bonds = (np.array([0, 0, 1, 2, 3, 4]),
+                      np.array([1, 2, 3, 5, 4, 5]))
+
+    double_bond = (np.array([18]), np.array([20]))
+    triple_bond = (np.array([7]), np.array([11]))
+
+    assert atoms == real_atoms, "Incorrect atoms extracted."
+    assert np.where(np.isclose(bonds, 1.5), atol=0.25) == aromatic_bonds
+    assert np.where(np.isclose(bonds, 2.0), atol=0.25) == double_bond
+    assert np.where(np.isclose(bonds, 3.0), atol=0.25) == triple_bond
 
     return
 
