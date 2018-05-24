@@ -6,6 +6,15 @@ A pipeline written in Python that converts NWChem output files into InChI and SM
 
 BLUES is the result of a collaborative capstone project between students at the [University of Washington](https://www.washington.edu) and staff scientists at the [Pacific Northwest National Lab](https://www.pnnl.gov/) as a part of the [DIRECT (Data Intensive Research Enabling Clean Technologies) Training Program](http://depts.washington.edu/uwdirect/) at the [University of Washington](https://www.washington.edu).
 
-# Dependencies
+## Dependencies
 - rdkit
 - numpy
+
+## Installation
+```
+git clone https://github.com/quantum2classical/blues.git
+cd blues
+conda env create
+source activate blues
+python setup.py install
+```
