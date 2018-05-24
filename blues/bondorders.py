@@ -1,9 +1,7 @@
 import os
-from IPython.display import Image
 import numpy as np
 from rdkit import Chem
 from rdkit.Chem import AllChem, Draw
-
 
 
 def convert_bond_orders(bond_orders):
