@@ -2,20 +2,22 @@ from .. import *
 from ..utils import file_path
 import numpy as np
 
-pth = file_path('test_atom_list.txt','tests/test_files')
-atoms = order_atoms(pth)
+# path for test_atom_list
+pth = file_path('test_atom_list.txt', 'tests/test_files')
 
 
 def test_order_atoms():
-
+    # list of atoms
+    atoms = order_atoms(pth)
     assert sum(line.isspace() for line in atoms) == 0, 'order_atoms function failed to eliminate whitespace'
     actual_length = len(atoms)
     assert len(atoms) == 47, 'molecule should have 47 atoms,' + str(actual_length) + ' was counted'
     return True
 
 
+
 def test_add_atoms():
-    result = add_atoms(atoms)
+    result = add_atoms(pth)
     assert type(result) == Chem.rdchem.RWMol
     return True
 
@@ -25,8 +27,7 @@ def test_build_molecule():
     bond_matrix2 = np.array([[1, 1, 0], [0, 2, 1]])
     bond_matrix3 = np.array([[1, 0, 1.2], [0, 2, 0], [0, 0, 1]])
     bond_matrix4 = np.array([[1, 0, 0], [0, 1, 0], [0, 2, 0]])
-    atoms = order_atoms(pth)
-    mol = add_atoms(atoms)
+    mol = add_atoms(pth)
     # try string value
     try:
         build_molecule(bond_matrix1)

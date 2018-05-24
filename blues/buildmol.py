@@ -4,41 +4,39 @@ import numpy as np
 from rdkit import Chem
 from rdkit.Chem import AllChem, Draw
 
-def order_atoms(filename):
+
+def order_atoms(atom_file):
     """
     Enumerates the .txt file containing all atoms in the molecule, order the same as JANPA output and eliminate whitespace
-
-    Parameters: txt file
+    Parameters
     ----------
+    filename: string of file path
 
-    filename: .txt file
-
-    Returns: ordered txt file
-
-
+    Returns: ordered list of atoms in molecule
     """
-    with open(filename) as f:
+    with open(atom_file) as f:
         atoms = f.readlines()
         atoms = [atom.strip() for atom in atoms]
 
     return atoms
 
 
-def add_atoms(atoms):
+def add_atoms(atom_file):
     """
-    add atoms and correct bonds to build molecule through RDKit
+    add atoms and correct bonds to build molecule as object through RDKit
     """
-    # create molecule under RWMol class, easily editable
+    # create molecule under RWMol class
     mol = Chem.RWMol()
     # call function to order atoms
-    order_atoms()
+    atoms = order_atoms(atom_file)
     # add all atoms to molecule
     for atom in atoms:
         mol.AddAtom(Chem.Atom(atom))
     return mol
 
 
-def build_molecule(bond_orders):
+
+def build_molecule(wiberg_file):
     """
     Takes connection matrix and builds the molecule with RDKit
 
@@ -50,7 +48,7 @@ def build_molecule(bond_orders):
 
     """
     # add bonds from connection matrix built from bondorders.py
-    bond_orders = get_bond_orders(wiberg_file)
+    bonding_matrix = get_bond_orders(wiberg_file)
     # ensure matrix is square
     assert bonding_matrix.shape[0] == bonding_matrix.shape[1], 'matrix must be square!'
     # ensure diagonals don't equal 0
