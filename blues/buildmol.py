@@ -4,25 +4,6 @@ import numpy as np
 from rdkit import Chem
 from rdkit.Chem import Draw
 
-
-def order_atoms(atom_file):
-    """
-    Enumerates the .txt file containing all atoms in the molecule, order the same as JANPA output and eliminate
-    whitespace
-
-    Parameters
-    ----------
-    atom_file: string of file path
-
-    Returns: ordered list of atoms in molecule
-    """
-    with open(atom_file) as f:
-        atoms = f.readlines()
-        atoms = [atom.strip() for atom in atoms]
-
-    return atoms
-
-
 def add_atoms(atom_file):
     """
     Adds atoms and correct bonds to build molecule using an RDKit class
@@ -36,16 +17,14 @@ def add_atoms(atom_file):
     """
     # create molecule under RWMol class
     mol = Chem.RWMol()
-    # call function to order atoms
-    atoms = order_atoms(atom_file)
     # add all atoms to molecule
-    for atom in atoms:
+    for atom in atom_file:
         mol.AddAtom(Chem.Atom(atom))
     return mol
 
 
 
-def build_molecule(atom_list):
+def build_molecule(atom_list, bo_matrix):
     """
     Takes .txt file, builds molecule and connection matrix specifying bonds, and builds the molecule with RDKit
 
@@ -58,14 +37,12 @@ def build_molecule(atom_list):
     RWMol object with structure and bonding based on JANPA's Wiberg-Mayer bond index matrix
 
     """
-    # add bonds from connection matrix built from bondorders.py
-    bonding_matrix = get_bond_orders(atom_list)
     # ensure matrix is square
-    assert bonding_matrix.shape[0] == bonding_matrix.shape[1], 'matrix must be square!'
+    assert bo_matrix.shape[0] == bo_matrix.shape[1], 'matrix must be square!'
     # ensure diagonals don't equal 0
-    for i in range(bonding_matrix.shape[0]):
-        assert bonding_matrix[i,i] != 0, 'diagonals cannot equal 0'
-    for i, j in zip(*np.triu_indices_from(bonding_matrix, 1)):
+    for i in range(bo_matrix.shape[0]):
+        assert bo_matrix[i,i] != 0, 'diagonals cannot equal 0'
+    for i, j in zip(*np.triu_indices_from(bo_matrix, 1)):
         if np.isclose(bonds[i, j], 1):
             mol.AddBond(int(i), int(j), Chem.BondType.SINGLE)
         elif np.isclose(bonds[i, j], 1.5):
