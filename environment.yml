@@ -5,3 +5,4 @@ channels:
 dependencies:
   - rdkit
   - numpy
+  - IPython
