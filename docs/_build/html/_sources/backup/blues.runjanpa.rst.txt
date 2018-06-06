@@ -1,0 +1,25 @@
+blues.runjanpa
+==============
+
+.. automodule:: blues.runjanpa
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_bond_orders
+      parse_atom_list
+      parse_bond_orders
+      run_janpa
+   
+   
+
+   
+   
+   
+
+   
+   
+   

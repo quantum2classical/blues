@@ -1,0 +1,22 @@
+blues.bondorders
+================
+
+.. automodule:: blues.bondorders
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      convert_bond_orders
+   
+   
+
+   
+   
+   
+
+   
+   
+   

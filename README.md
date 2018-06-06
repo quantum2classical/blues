@@ -18,3 +18,6 @@ conda env create
 source activate blues
 python setup.py install
 ```
+## Documentation
+Use your favorite browser to open `blues/docs/_build/html/index.rst`
+
