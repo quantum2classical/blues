@@ -1,0 +1,23 @@
+blues.utils
+===========
+
+.. automodule:: blues.utils
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      file_path
+      get_directory
+   
+   
+
+   
+   
+   
+
+   
+   
+   

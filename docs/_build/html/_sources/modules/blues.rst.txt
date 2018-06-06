@@ -1,0 +1,16 @@
+blues
+=====
+
+.. automodule:: blues
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   

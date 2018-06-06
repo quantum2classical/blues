@@ -1,0 +1,24 @@
+blues.core
+==========
+
+.. automodule:: blues.core
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      molden2inchi
+      molden2lewis
+      molden2smiles
+   
+   
+
+   
+   
+   
+
+   
+   
+   
