@@ -24,7 +24,7 @@ def get_directory(directory):
     path_to_dir = abspath(join(dirname(__file__), directory))
 
     if not os.path.exists(path_to_dir):
-        raise OSError(f"'{directory}' directory does not exist.")
+        raise OSError("'{}' directory does not exist.".format(directory))
     else:
         pass
 
@@ -48,7 +48,7 @@ def file_path(filename, directory):
     full_path = join(full_dirname, filename)
 
     if not os.path.exists(full_path):
-        raise OSError(f"{full_path} does not exist.")
+        raise OSError("{} does not exist.".format(full_path))
     else:
         pass
 
