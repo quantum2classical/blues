@@ -2,8 +2,19 @@ import os
 
 from PIL import Image
 
-from ..core import molden2smiles, molden2inchi, molden2lewis
+from ..core import MoldenConverter, molden2smiles, molden2inchi, molden2lewis
 from ..utils import file_path
+
+
+def test_MoldenConverter():
+    def test_convert():
+        test_molden = file_path('test.molden', 'tests/test_files')
+        test = MoldenConverter(test_molden)
+        
+        test.convert()
+
+        real_atoms = ['C', 'C']
+        assert test._molecule.
 
 
 def test_molden2smiles():
