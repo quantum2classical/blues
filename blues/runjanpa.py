@@ -2,7 +2,9 @@ import re
 import os
 
 import numpy as np
-from subprocess import call, DEVNULL
+import subprocess
+from subprocess import call
+
 
 from .utils import file_path
 
@@ -33,7 +35,7 @@ def run_janpa(molden_file, wiberg_file='wiberg.dat', delete_wiberg_file=False):
 
     retcode = call(['java', '-jar', janpa_path, '-i', molden_file,
                     '-ignoreFock', '-WibergBondOrders_File', wiberg_file],
-                   stdout=DEVNULL)
+                   stdout=subprocess.DEVNULL)
 
     if retcode != 0:
         raise Exception("JANPA program did not exit with code 0.")
