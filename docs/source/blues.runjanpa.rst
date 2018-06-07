@@ -1,5 +1,5 @@
 blues\.runjanpa
-==============
+===============
 
 .. automodule:: blues.runjanpa
     :members:

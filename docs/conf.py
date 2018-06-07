@@ -51,8 +51,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'blues'
-copyright = 'Luke Gibson, Nathan Lauria, Chenggang Xi, Univerisity of Washington, 2018'
-author = 'Luke Gibson, Nathan Lauria, Chenggang Xi'
+copyright = 'Luke Gibson, Nathan Laurie, Chenggang Xi, Univerisity of Washington, 2018'
+author = 'Luke Gibson, Nathan Laurie, Chenggang Xi'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
