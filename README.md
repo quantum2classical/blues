@@ -15,10 +15,10 @@ Documentation can be found [here](https://blues.readthedocs.io/en/latest/index.h
 
 ## Installation
 ```
-git clone https://github.com/quantum2classical/blues.git
-cd blues
-conda env create
-source activate blues
-python setup.py install
+$ git clone https://github.com/quantum2classical/blues.git
+$ cd blues
+$ conda env create
+$ source activate blues
+$ python setup.py install
 ```
 
