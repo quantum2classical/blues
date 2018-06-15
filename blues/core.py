@@ -9,34 +9,77 @@ class MoldenConverter:
     """Converts Molden files into chemical identifier strings."""
 
     def __init__(self, molden_file):
-        """Inits MoldenConverter class."""
+        """Inits MoldenConverter class.
+
+        Parameters
+        ----------
+        molden_file : str
+            Path to Molden file."""
 
         self.molden = molden_file
-        self.molecule = None
+        self._molecule = None
         self.smiles = None
         self.inchi = None
         self.lewis = None
         return
 
-    def convert(self):
-        """Runs JANPA and stores the final molecular structure.""" 
-        pass
-        return
-
     def tosmiles(self):
-        """Returns SMILES string of molecule in Molden file."""
-        pass
-        return smiles
+        """Returns SMILES string of molecule in Molden file.
+
+        Returns
+        -------
+        str
+            SMILES representation of molecule."""
+        if not self._molecule:
+            atoms, raw_bonds = run_janpa(self.molden)
+            bonds = convert_bond_orders(raw_bonds)
+            self._molecule = build_molecule(atoms, bonds)
+            self.smiles = Chem.MolToSmiles(self._molecule)
+            # two_d, three_d, inchi, smiles = draw_molecule(atoms, bonds)
+        else:
+            if self.smiles:
+                pass
+            else:
+                self.smiles = Chem.MolToSmiles(self._molecule)
+
+        return self.smiles
 
     def toinchi(self):
-        """Returns InChI string of molecule in Molden file."""
-        pass
-        return inchi
+        """Returns InChI string of molecule in Molden file.
+
+        Returns
+        -------
+        str
+            InChI representation of molecule."""
+        if not self._molecule:
+            atoms, raw_bonds = run_janpa(self.molden)
+            bonds = convert_bond_orders(raw_bonds)
+            self._molecule = build_molecule(atoms, bonds)
+            self.inchi = Chem.MolToInchi(self._molecule)
+            # two_d, three_d, inchi, smiles = draw_molecule(atoms, bonds)
+        else:
+            if self.inchi:
+                pass
+            else:
+                self.inchi = Chem.MolToSmiles(self._molecule)
+        return self.inchi
 
     def tolewis(self):
-        """Returns 2D Lewis structure of molecule in Molden file."""
-        pass
-        return lewis
+        """Returns 2D Lewis structure of molecule in Molden file.
+
+        Returns
+        -------
+        np.ndarray
+            Array containing the image of the 2D Lewis structure."""
+        if not self.lewis:
+            atoms, raw_bonds = run_janpa(self.molden)
+            bonds = convert_bond_orders(raw_bonds)
+            self._molecule = build_molecule(atoms, bonds)
+            self.lewis, three_d, self.inchi, self.smiles = draw_molecule(atoms,
+                                                                         bonds)
+        else:
+            pass
+        return self.lewis
 
 
 def molden2smiles(molden_file):
