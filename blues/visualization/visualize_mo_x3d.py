@@ -1,8 +1,5 @@
-from . import *
+from . import choose_calculate_mo
 from choose_calculate_mo import *
-from orbkit.display import init_display, display
-import orbkit as ok
-
 
 
 def mo_to_visualize(filename, before_homo, after_homo, selected_mo_string, 
