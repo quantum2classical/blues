@@ -1,18 +1,24 @@
 import numpy as np
-from . import *
 import pandas as pd
 import sys
 sys.path.append('C:\orbkit-cython')
+
 from orbkit import read, grid, display, atomic_populations, options, main, extras, output
 from orbkit.output import pdb_creator ,xyz_creator
+from orbkit.display import init_display, display
 import orbkit as ok
+import matplotlib.pyplot as plt
+
 # this submodule should output:
 # 1. strings of the number of MOs
 # 2. a list of which MOs will be calculated
 # 3. calculated density plots for all MOs
 # 4. 3d grid with x, y, and z values
 
-
+# set up glob. variable to check whether density calculation has been done
+global density_done, mesh_done
+density_done = False
+mesh_done = False
 
 def read_molden(filename, all_mo=True):
 """
@@ -131,13 +137,13 @@ PDB file with atomic positions and
     xyz_o = [xo, yo, zo]
     xyz_n = [xn, yn, zn]
     
+    mesh_done=True
+    
     return xyz_c, xyz_o, xyz_n
     
 
         
-def calculate_densities(filename, before_homo, after_homo, 
-                    extend=7.0, output_name='charges', comments='', 
-                    density_done=False)
+def calculate_densities(filename, before_homo, after_homo, extend=7.0)
 """
 parameters
 ---------
@@ -155,8 +161,6 @@ mo_list: list of dictionaries containing MO information
 mo_info: dict
 
 """
-
-global density_done
     read_file,  orbital_string_input 
     = my_mo_list(filename, before_homo, after_homo)
     
@@ -175,6 +179,7 @@ global density_done
     mo_list, mo_info = extras.calc_mo(
     read_file,orbital_string_input,ofid='vis/mo')
     
+    density_done = True
     return x, y, z, mo_list, mo_info
     
     
