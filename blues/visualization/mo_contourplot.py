@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from . import choose_calculate_mo
 from choose_calculate_mo import *
 
@@ -23,7 +24,9 @@ Returns
         
     # check if atomic positions have been found
     if mesh_done=False:
+        xyz_c, xyz_o, xyz_n =
         get_atom_positions(filename, output_name='charges', comments='')
+        xyz = [xyz_c, xyz_o, xyz_n]
     else:
         pass
     
@@ -45,9 +48,11 @@ Returns
     
     mo_slices = [mo_list_xy, mo_list_xz, mo_list_yz]
     
-    return XZ, YZ, XY, YY, XX, YX, mo_slices
+    return XZ, YZ, XY, YY, XX, YX, mo_slices, xyz
     
-def contour_plots(contour_lines=10, linewidth=0.5, cmap='seismic'):
+def contour_plots(selected_mo, contour_lines=10, linewidth=0.5, cmap='seismic', 
+filename=None, before_homo=None, after_homo=None, extend=7.0, 
+output_name='charges', comments=''):
 """
 Parameters
 ----------
@@ -56,39 +61,69 @@ Returns
 ----------
 
 """
-    XZ, YZ, XY, YY, XX, YX, mo_slices = make_mesh_grid(....)
+    # fontsize
+    font = 16
+    
+    # get mesh, density slices, and atom locations
+    XZ, YZ, XY, YY, XX, YX, mo_slices, xyz = make_mesh_grid(selected_mo, 
+    figsize=(6,16), filename=None, before_homo=None, after_homo=None, 
+    extend=7.0, output_name='charges', comments='')
+    
+    xyz[0] = xyz_c
+    xyz[1] = xyz_o
+    xyz[2] = xyz_n 
     
     # set up grid of 3x1 contour plots of electron density for selected MO
     f, (pic1, pic2, pic3) = 
-    plt.subplots(3,1,sharex=True,sharey=True,figsize=(6,16))
+    plt.subplots(3,1,sharex=True,sharey=True,figsize=figsize)
     
     # figure 1
     pic1.contour(XZ,YZ,mo_slices[0],contour_lines,linewidths=0.5,colors='k')
-    pic1.contourf(XZ,YZ,mo_list[0],contour_lines,
+    pic1.contourf(XZ,YZ,mo_slices[0],contour_lines,
     cmap=cmap,vmax=abs(mo_slices[0]).max(),vmin=-abs(mo_slices[0]).max())
     pic1.set_xlabel('x',fontsize=16)
     pic1.set_ylabel('y',fontsize=16)
     
+    # atom locations
+    color=(0, 0, 0)
+    pic1.scatter(xyz_c[0], xyz_c[1], marker=r"$ {} $".format('C'), c=color)
+    pic1.scatter(xyz_n[0], xyz_n[1], marker=r"$ {} $".format('N'), c=color)
+    pic1.scatter(xyz_o[0], xyz_o[1], marker=r"$ {} $".format('O'), c=color)
+    
+    pic1.set_xlabel('x(Å)',fontsize=font)
+    pic1.set_ylabel('y(Å)',fontsize=font)
+    
     # set title for whole figure
-    pic1.set_title('MO is {0}. MO energy is {1}'.
-                format((orbital_list[selected_mo]),(mo_info['mo_spec'][selected_mo]['energy']),fontsize=18))
+    pic1.set_title('Charge Density of {0}. MO energy is {1}'
+    .format((orbital_list[selected_mo]),
+    (mo_info['mo_spec'][selected_mo]['energy']),fontsize=18))
     
     # figure 2
-    pic2.contour(XY,YY,mo_slices[1],contour_lines,linewidths=0.5,colors='k')
-    pic2.contourf(XY,YY,mo_slices[1],contour_lines,
-    cmap='seismic',vmax=abs(mo_slices[1]).max(),vmin=-abs(mo_slices[1]).max()) 
-    pic2.set_xlabel('x',fontsize=16)
-    pic2.set_ylabel('z',fontsize=16)
+    pic2.contour(XY,YY,mo_list_xz,contour_lines,linewidths=0.5,colors='k')
+    pic2.contourf(XY,YY,mo_list_xz,contour_lines,
+    cmap='seismic',vmax=abs(mo_list_xz).max(),vmin=-abs(mo_list_xz).max()) 
+    
+    # atom locations
+    pic2.scatter(xyz_c[0], xyz_c[2], marker=r"$ {} $".format('C'), c=color)
+    pic2.scatter(xyz_n[0], xyz_n[2], marker=r"$ {} $".format('N'), c=color)
+    pic2.scatter(xyz_o[0], xyz_o[2], marker=r"$ {} $".format('O'), c=color)
+    
+    pic2.set_xlabel('x(Å)', fontsize=font)
+    pic2.set_ylabel('z(Å)', fontsize=font)
     
     # figure 3
-    pic3.contour(XX,YX,mo_slices[2],contour_lines,linewidths=0.5,colors='k')
-    pic3.contourf(XX,YX,mo_slices[2],contour_lines,
-    cmap='seismic',vmax=abs(mo_slices[2]).max(),vmin=-abs(mo_slices[2]).max())
-    pic3.set_xlabel('y',fontsize=16)
-    pic3.set_ylabel('z',fontsize=16)     
+    pic3.contour(XX,YX,mo_list_yz,contour_lines,linewidths=0.5,colors='k')
+    pic3.contourf(XX,YX,mo_list_yz,contour_lines,
+    cmap='seismic',vmax=abs(mo_list_yz).max(),vmin=-abs(mo_list_yz).max())  
+    # atom locations
+    pic3.scatter(xyz_c[1], xyz_c[2], marker=r"$ {} $".format('C'), c=color)
+    pic3.scatter(xyz_n[1], xyz_n[2], marker=r"$ {} $".format('C'), c=color)
+    pic3.scatter(xyz_o[1], xyz_o[2], marker=r"$ {} $".format('C'), c=color)
+    
+    pic3.set_xlabel('y(Å)', fontsize=font)
+    pic3.set_ylabel('z(Å)', fontsize=font)     
     
     # plot
     return f.show()
-    
     
     

@@ -2,11 +2,11 @@ from . import choose_calculate_mo
 from choose_calculate_mo import *
 
 
-def mo_to_visualize(filename, before_homo, after_homo, selected_mo_string, 
-                    contour1, contour2, notebook=True, 
+def mo_to_visualize(selected_mo_string, contour, notebook=True, 
                     opacity=0.3, scale_factor=0.5, wireframe=False,
-                    saved_image='my_mo.png'):
-                    
+                    saved_image='my_mo.png',filename=None, before_homo=None, 
+                    after_homo=None ):
+       
 """
 x3d rendering can only be used in a Jupyter Notebook for now. If the user 
 only wants a .png, change notebook=False
@@ -15,13 +15,18 @@ Parameters
 ---------
 selected_mo_string: string of MO to plot 
     example: 'HOMO-3', 'LUMO', HOMO+5'
-contour1: float < 1.0 for first isosurface
-contour2: float < 1.0 for second isosurface    
+contour: float < 1.0 for isosurfaces of both phases   
     
 Returns
 ---------
 1 x3d or png rendering with 2 isosurfaces and atomic positions
 """
+
+    if density_done = False:
+        calculate_densities(filename, before_homo, after_homo, extend=2.0)
+    else:
+        pass
+
 
     if notebook = True:
         # clear figure and re-initialize notebook with x3d for interactive,
@@ -39,8 +44,8 @@ Returns
     selected_mo = orbital_list.index(selected_mo_string)
     
     # contour spacing based on max density value
-    contour1 = [mo_list[selected_mo].max()*contour1]
-    contour2 = [mo_list[selected_mo].max()*contour2]
+    contour1 = [mo_list[selected_mo].max()*contour]
+    contour2 = [-mo_list[selected_mo].max()*contour]
     
     opacity = 0.3
     # auto-set the image boundaries from grid previously set
@@ -52,7 +57,7 @@ Returns
     isosurf = mlab.pipeline.iso_surface(
         src, contours=contour1, opacity=opacity, 
         color=(0, 0, 0.8), extent=extent)
-    # second isosurface
+    # isosurface of opposite phase
     isosurf = mlab.pipeline.iso_surface(
         src, contours=contour2, opacity=opacity, 
         color=(0.8, 0, 0), extent=extent)

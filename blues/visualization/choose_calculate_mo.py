@@ -20,30 +20,20 @@ global density_done, mesh_done
 density_done = False
 mesh_done = False
 
-def read_molden(filename, all_mo=True):
+def read_molden(filename, itype='molden', all_mo=True):
 """
 string of molden file, calculate all mo's
 
 """
-    # read molden file into qc class
+    # read molden file
     read_file = read.main_read(filename, itype='molden', all_mo=True)
-    return read_file
-
-
-def enumerate_mo(filename, all_mo=True):
-"""
-input: molden file name
-returns: molden file read by orbkit,
-        string telling how many MOs there are, which is HOMO
-"""
-    read_file = read_molden(filename)
     #find out how many MOs and where HOMO is by finding when MO occupancy = 0
-    for x in range(len(qc.mo_spec)):
-        if qc.mo_spec[x]['occ_num'] != 0.0:
+    for x in range(len(read_file.mo_spec)):
+        if read_file.mo_spec[x]['occ_num'] != 0.0:
             continue
         else:
-            where_is_homo = print('HOMO is MO number ' + str(x - 1) + \
-              ' out of ' + str(len(qc.mo_spec)))
+            where_is_homo = 'HOMO is MO number ' + str(x - 1) + \
+              ' out of ' + str(len(read_file.mo_spec))
             break
             
     print(where_is_homo)
@@ -58,8 +48,8 @@ how many after HOMO
 
 returns:
 """
-    # 
-    read_file = enumerate_mo(filename)
+    # read molden file
+    read_file = read_molden(filename, all_mo=True)
     
     # make string to input into orbkit's calculation function
     orbital_string_input = 'homo-'+str(before_homo)+':lumo+'+str(after_homo)
@@ -91,13 +81,13 @@ parameters
 filename: 
     
 returns
---------
-PDB file with atomic positions and  
+----------
+PDB file with atomic positions and partial charges of each atoms. 
+This function parses the PDB so atom positions can be plotted 
 
 """
-    # read molden file, create qc class
-    read_file = read_molden(filename, itype='molden', all_mo=True, 
-    output_name='charges', comments='') 
+    # read molden file
+    read_file = read_molden(filename, itype='molden', all_mo=True) 
     
     # create dictionary of mulliken, lowdin pop analysis
     pop = atomic_populations.mulliken(read_file)
@@ -143,7 +133,7 @@ PDB file with atomic positions and
     
 
         
-def calculate_densities(filename, before_homo, after_homo, extend=7.0)
+def calculate_densities(filename, before_homo, after_homo, extend=2.0)
 """
 parameters
 ---------
@@ -168,7 +158,7 @@ mo_info: dict
     
     # adjust grid to fit molecule + extended units
     # this prevents calc_mo function from automatically setting up grid     
-    grid.adjust_to_geo(qc,extend=extend,step=0.1)
+    grid.adjust_to_geo(read_file,extend=extend,step=0.1)
     grid.grid_init()
     # set up x,y,z of grid
     x = grid.x
