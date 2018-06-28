@@ -2,25 +2,33 @@ from . import choose_calculate_mo
 from choose_calculate_mo import *
 
 
-def mo_to_visualize(selected_mo_string, contour, notebook=True, 
+def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True, 
                     opacity=0.3, scale_factor=0.5, wireframe=False,
                     saved_image='my_mo.png',filename=None, before_homo=None, 
                     after_homo=None ):
-       
-"""
-x3d rendering can only be used in a Jupyter Notebook for now. If the user 
-only wants a .png, change notebook=False
-
-Parameters
----------
-selected_mo_string: string of MO to plot 
-    example: 'HOMO-3', 'LUMO', HOMO+5'
-contour: float < 1.0 for isosurfaces of both phases   
+    """
+    x3d rendering can only be used in a Jupyter Notebook for now. If the user 
+    only wants a .png, change notebook=False
     
-Returns
----------
-1 x3d or png rendering with 2 isosurfaces and atomic positions
-"""
+    Parameters
+    ---------
+    selected_mo: string, MO relative to HOMO user wants to view. Example, 
+        'HOMO-30','LUMO', 'HOMO+6'. Must be in orbital list.
+        
+    contour1: float < 1.0 for isosurface of one phase. Contour values will be
+    based on max value of density. 
+    Example - contour = contour1 * mo_list[selected_mo].max()
+    
+    contour2: float < 1.0 for isofurface of opposite phase. Contour values will 
+    be based on max value of density. 
+    Example - contour = contour1 * mo_list[selected_mo].max()
+    
+    notebook: boolean, 
+        
+    Returns
+    ---------
+    1 x3d or png rendering with 2 isosurfaces and atomic positions
+    """
 
     if density_done = False:
         calculate_densities(filename, before_homo, after_homo, extend=2.0)
@@ -35,9 +43,9 @@ Returns
         mlab.init_notebook('x3d',500,500)
     else:
         pass
-        
+      
     read_file, orbital_string_input = 
-    my_mo_list(filename=filename, before_homo=before_homo, after_homo=after_homo)
+    my_mo_list(filename, before_homo, after_homo)
     
     # convert string to index    
     selected_mo_string = selected_mo_string
@@ -45,7 +53,8 @@ Returns
     
     # contour spacing based on max density value
     contour1 = [mo_list[selected_mo].max()*contour]
-    contour2 = [-mo_list[selected_mo].max()*contour]
+    contour2 = [-mo_list[selected_mo].min()*contour]
+    print(contour1, contour2)
     
     opacity = 0.3
     # auto-set the image boundaries from grid previously set
@@ -78,7 +87,7 @@ Returns
         if notebook=False:
         mlab.axes()
         mlab.options.offscreen = True
-        mlab.savefig(figure=fig, filename=saved_image)
+        mlab.savefig(figure=isosurf, filename=selected_mo_string+'.png')
     else:
         pass
         
