@@ -23,11 +23,17 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
     be based on max value of density. 
     Example - contour = contour1 * mo_list[selected_mo].max()
     
-    notebook: boolean, 
-        
+    notebook: boolean, True is user is on Jupyter Notebook. If false, image will
+    be saved as png
+    
+    scale factor: float, determines size of atoms in the plot. Defauls is 0.5
+    
+    wireframe: boolean, set True is user wants wireframe view of MO
+    
+    
     Returns
     ---------
-    1 x3d or png rendering with 2 isosurfaces and atomic positions
+    x3d or png rendering of isosurface for both phases and atomic positions
     """
 
     if density_done = False:
@@ -54,7 +60,7 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
     # contour spacing based on max density value
     contour1 = [mo_list[selected_mo].max()*contour]
     contour2 = [-mo_list[selected_mo].min()*contour]
-    print(contour1, contour2)
+    print('contour1='+str(contour1), 'contour2='+str(contour2))
     
     opacity = 0.3
     # auto-set the image boundaries from grid previously set
@@ -85,6 +91,7 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
         pass
     
         if notebook=False:
+        # shows axes for png
         mlab.axes()
         mlab.options.offscreen = True
         mlab.savefig(figure=isosurf, filename=selected_mo_string+'.png')

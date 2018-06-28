@@ -37,7 +37,10 @@ def read_molden(filename, itype='molden', all_mo=True):
     Also prints which MO HOMO is. Example: 
     'HOMO is MO 50 out of 100'
     """
-       
+    
+    # make sure right file type and itype matches   
+    assert isinstance(filename, string), 'filename must be molden file string'
+    assert filename[-6:-1]+filename[-1] == itype,'file type must match itype argument'
     
     # read molden file
     read_file = read.main_read(filename, itype='molden', all_mo=True)
@@ -55,7 +58,7 @@ def read_molden(filename, itype='molden', all_mo=True):
     return read_file
 
 
-def my_mo_list(filename, before_homo, after_homo, all_mo=True):
+def my_mo_list(before_homo, after_homo):
     """
     parameters
     ----------
@@ -68,22 +71,31 @@ def my_mo_list(filename, before_homo, after_homo, all_mo=True):
 
     
     returns:
-    ---------
-    read_file: qc class object of read molden file
+    ----------
     
     orbital_string_input: string input used in calc_mo function
     
     Also prints list of strings of MOs which the user has chosen to be 
     calculated
-    
-    
     """
-    # read molden file
-    read_file = read_molden(filename, all_mo=True)
     
+    # ensure correct input type
+    assert isinstance(before_homo, int), 'input must be integer'
+    assert isinstance(after_homo, int), 'input must be integer'
+    
+
+    if before_homo and after_homo < 0:
+        raise Exception('list must begin at lowest MO, this list would be reversed')    
+    elif after_homo < 0 and abs(after_homo) > abs(before_homo):
+        raise Exception('if after_homo is negative, absolute value must be less or equal to before_homo')
+    elif before_homo < 0 and abs(before_homo) > abs(after_homo):
+        raise Exception('if before_homo is negative, absolute value must be less or equal to after_homo')
+    else:
+        pass
+        
     # make string to input into orbkit's calculation function
     orbital_string_input = 'homo-'+str(before_homo)+':lumo+'+str(after_homo)
-    
+  
     # make list of orbitals user wishes to have calculated
     orbital_list = []
     orb_list = ['HOMO+'+str(x) for x in range(-before_homo, after_homo+1)]
@@ -99,8 +111,8 @@ def my_mo_list(filename, before_homo, after_homo, all_mo=True):
             orbital_list.append(orb_list[x])
        
     print(orbital_list)
-     
-    return read_file, orbital_string_input
+    
+    return orbital_string_input
 
 
 
@@ -201,8 +213,8 @@ def calculate_densities(filename, before_homo, after_homo, extend=2.0):
     orbital_list: list of MOs that user chose to calculate
    
     """
-    read_file,  orbital_string_input = my_mo_list
-    (filename, before_homo, after_homo)
+    orbital_string_input = my_mo_list(filename, before_homo, after_homo)
+    read_file = read_molden(filename, itype='molden', all_mo=True)
     
     # create file with atom positions
     
