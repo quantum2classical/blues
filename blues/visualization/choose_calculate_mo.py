@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 sys.path.append('C:\orbkit-cython')
-
+import os
 from orbkit import read, grid, atomic_populations, options, main, extras
 from orbkit.output import pdb_creator ,xyz_creator
 from orbkit.display import init_display, display
@@ -116,14 +116,11 @@ def my_mo_list(before_homo, after_homo):
 
 
 
-def get_atom_positions(filename, output_name='charges', comments=''):
+def get_atom_positions(filename, comments=''):
     """
     parameters
     ----------
     filename: string of .molden file to be read
-    
-    output_name: string of PDB file to be made which contains atomic positions.
-    default is 'charges.pdb'
     
     comments: string of comments embedded in pdb file
         
@@ -133,6 +130,9 @@ def get_atom_positions(filename, output_name='charges', comments=''):
     file. One array for N, O, and the rest C and any other atom
     
     """
+    
+    # output name will be filename_charges.pdb
+    output_name = filename[0:len(a)-7] + str('_atom_positions')
     # read molden file
     read_file = read_molden(filename, itype='molden', all_mo=True) 
     
@@ -142,27 +142,30 @@ def get_atom_positions(filename, output_name='charges', comments=''):
     # output pdb file to get atomic positions and partial charges
     pdb_creator(read_file.geo_info, read_file.geo_spec, 
     output_name=output_name, charges=pop['charge'],comments=comments) 
-     
+    
     # read file
     atoms = pd.read_csv(output_name+'.pdb',header=None, delim_whitespace=True,
     names=['what','number','atom','x','y','z','charge'])
     
     # parse file to obtain positions
-    atoms=data.loc[3:len(data)-3]
-    atoms=data.iloc[:,2:6]
+    atoms=atoms.loc[3:len(atoms)-3]
+    atoms=atoms.iloc[:,2:6]
     # remove hydrogens
-    atoms = data[data.atom != 'H']
+    atoms = [atoms.atom != 'H']
     
+    # unit coversion
+    ang2au = 0.529
     # scale to make units a.u.
-    atoms['x']=atoms['x']/0.529
-    atoms['y']=atoms['y']/0.529
-    atoms['z']=atoms['z']/0.529
+    atoms['x']=atoms['x']/ang2au
+    atoms['y']=atoms['y']/ang2au
+    atoms['z']=atoms['z']/ang2au
+    
     # create individual dataframes for O, N atoms
-    atoms_o = data[data.atom=='O']
-    atoms_n = data[data.atom =='N']
+    atoms_o = atoms[atoms.atom=='O']
+    atoms_n = atoms[atoms.atom =='N']
     # remove O,N from original dataframe
-    atoms = data[data.atom != 'O']
-    atoms = data[data.atom !='N'] 
+    atoms = atoms[atoms.atom != 'O']
+    atoms = atoms[atoms.atom !='N'] 
     
     # convert all to arrays
     xc = np.array(atoms.x)
@@ -179,13 +182,17 @@ def get_atom_positions(filename, output_name='charges', comments=''):
     xyz_o = [xo, yo, zo]
     xyz_n = [xn, yn, zn]
     
+    # move file to atom_positions directory
+    os.rename(output_name+'.pdb', 'atom_positions/'+output_name+'.pdb')
+    
     atoms_done=True
     
     return xyz_c, xyz_o, xyz_n
     
 
         
-def calculate_densities(filename, before_homo, after_homo, extend=2.0):
+def calculate_densities(filename, before_homo, after_homo, extend=2.0,
+                        numproc=None):
     """
     parameters
     ---------
@@ -199,6 +206,8 @@ def calculate_densities(filename, before_homo, after_homo, extend=2.0):
     extend: float, how much to extend grid so MOs can be visualized. 
     2.0 default. Warning - extending by large amount will drastically slow down
     calculation
+    
+    numproc: int, number of processors available. Default is None
     
     returns
     ---------
@@ -229,7 +238,7 @@ def calculate_densities(filename, before_homo, after_homo, extend=2.0):
     
     # calculate densities
     mo_list, mo_info = extras.calc_mo(
-    read_file,orbital_string_input,ofid='vis/mo')
+    read_file, orbital_string_input, numproc=numproc)
     
     density_done = True
     return x, y, z, mo_list, mo_info
