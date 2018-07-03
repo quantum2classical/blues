@@ -1,7 +1,13 @@
 from . import choose_calculate_mo
 from choose_calculate_mo import *
 
+def visualization(filename, selected_mo_string):
+    var = raw_input("Please enter something: ")
+    print "you entered", var
 
+    
+    
+    
 def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True, 
                     opacity=0.3, scale_factor=0.5, wireframe=False,
                     saved_image='my_mo.png',filename=None, before_homo=None, 
@@ -36,13 +42,13 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
     x3d or png rendering of isosurface for both phases and atomic positions
     """
 
-    if density_done = False:
+    if density_done == False:
         calculate_densities(filename, before_homo, after_homo, extend=2.0)
     else:
         pass
 
 
-    if notebook = True:
+    if notebook == True:
         # clear figure and re-initialize notebook with x3d for interactive,
         # run this each time you want a new figure    
         mlab.clf()
@@ -50,8 +56,7 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
     else:
         pass
       
-    read_file, orbital_string_input = 
-    my_mo_list(filename, before_homo, after_homo)
+    read_file, orbital_string_input = my_mo_list(filename, before_homo, after_homo)
     
     # convert string to index    
     selected_mo_string = selected_mo_string
@@ -85,12 +90,12 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
     # all others (should be mostly carbon), white
     isosurf = mlab.points3d(xc, yc, zc, scale_factor=scale_factor)
         
-    if wireframe=True:
+    if wireframe == True:
         iso.actor.property.representation = 'wireframe'
     else:
         pass
     
-        if notebook=False:
+        if notebook == False:
         # shows axes for png
         mlab.axes()
         mlab.options.offscreen = True

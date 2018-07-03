@@ -9,16 +9,15 @@ from orbkit.display import init_display, display
 import orbkit as ok
 import matplotlib.pyplot as plt
 
+# set up global 
+global density_done, atoms_done
+density_done = False
+atoms_done = False
 # this submodule should output:
 # 1. strings of the number of MOs
 # 2. a list of which MOs will be calculated
 # 3. calculated density plots for all MOs
 # 4. 3d grid with x, y, and z values
-
-# set up glob. variable to check whether density calculation has been done
-global density_done, atoms_done
-density_done = False
-atoms_done = False
 
 def read_molden(filename, itype='molden', all_mo=True):
     """
@@ -39,7 +38,7 @@ def read_molden(filename, itype='molden', all_mo=True):
     """
     
     # make sure right file type and itype matches   
-    assert isinstance(filename, string), 'filename must be molden file string'
+    assert isinstance(filename, str), 'filename must be molden file string'
     assert filename[-6:-1]+filename[-1] == itype,'file type must match itype argument'
     
     # read molden file
@@ -109,10 +108,8 @@ def my_mo_list(before_homo, after_homo):
             orbital_list.append('LUMO')
         else:
             orbital_list.append(orb_list[x])
-       
-    print(orbital_list)
     
-    return orbital_string_input
+    return orbital_list, orbital_string_input
 
 
 
@@ -132,7 +129,7 @@ def get_atom_positions(filename, comments=''):
     """
     
     # output name will be filename_charges.pdb
-    output_name = filename[0:len(a)-7] + str('_atom_positions')
+    output_name = filename[0:len(filename)-7] + str('_atom_positions')
     # read molden file
     read_file = read_molden(filename, itype='molden', all_mo=True) 
     
@@ -185,12 +182,11 @@ def get_atom_positions(filename, comments=''):
     # move file to atom_positions directory
     os.rename(output_name+'.pdb', 'atom_positions/'+output_name+'.pdb')
     
-    atoms_done=True
+    atoms_done == True
     
     return xyz_c, xyz_o, xyz_n
     
 
-        
 def calculate_densities(filename, before_homo, after_homo, extend=2.0,
                         numproc=None):
     """
@@ -222,7 +218,8 @@ def calculate_densities(filename, before_homo, after_homo, extend=2.0,
     orbital_list: list of MOs that user chose to calculate
    
     """
-    orbital_string_input = my_mo_list(filename, before_homo, after_homo)
+    
+    orbital_list, orbital_string_input = my_mo_list(filename, before_homo, after_homo)
     read_file = read_molden(filename, itype='molden', all_mo=True)
     
     # create file with atom positions

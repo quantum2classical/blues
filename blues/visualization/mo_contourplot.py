@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from . import choose_calculate_mo
-from choose_calculate_mo import *
 
+from . import choose_calculate_mo
+from .choose_calculate_mo import calculate_densities, get_atom_positions, my_mo_list, density_done, atoms_done
+from .choose_calculate_mo import *
 
 
 def make_mesh_grid(selected_mo, filename=None, before_homo=None, 
@@ -26,16 +27,16 @@ after_homo=None, extend=2.0, output_name='charges', comments=''):
     """
     
     # check if density calculations have been done
-    if density_done = False:
+    if density_done == False:
         x, y, z, mo_list, mo_info = calculate_densities(filename, 
         before_homo, after_homo, extend)
     else:
         pass
         
     # check if atomic positions have been found
-    if atoms_done=False:
-        xyz_c, xyz_o, xyz_n =
-        get_atom_positions(filename, output_name='charges', comments='')
+    if atoms_done == False:
+        xyz_c, xyz_o, xyz_n = get_atom_positions(filename, output_name='charges'
+        , comments='')
         xyz = [xyz_c, xyz_o, xyz_n]
     else:
         pass
@@ -85,17 +86,20 @@ output_name='charges', comments=''):
     font = 16
     figsize=(6,16)
     
+    orbital_list, orbital_string_input = my_mo_list(filename, before_homo, after_homo)
+    
     # get mesh, density slices, and atom locations
     XZ, YZ, XY, YY, XX, YX, mo_slices, xyz = make_mesh_grid(selected_mo, 
     filename, before_homo, after_homo, extend, output_name='charges', comments='')
+    
     # parse atom locations
-    xyz[0] = xyz_c
-    xyz[1] = xyz_o
-    xyz[2] = xyz_n 
+    xyz_c = xyz[0]
+    xyz_o = xyz[1]
+    xyz_n = xyz[2]
     
     # set up grid of 3x1 contour plots of electron density for selected MO
-    f, (pic1, pic2, pic3) = 
-    plt.subplots(3,1,sharex=True,sharey=True,figsize=figsize)
+    f, (pic1, pic2, pic3) = plt.subplots(3,1,sharex=True,sharey=True,
+    figsize=figsize)
     
     # figure 1
     pic1.contour(XZ,YZ,mo_slices[0],contour_lines,linewidths=0.5,colors='k')
@@ -121,7 +125,7 @@ output_name='charges', comments=''):
     # figure 2
     pic2.contour(XY,YY,mo_slices[1],contour_lines,linewidths=0.5,colors='k')
     pic2.contourf(XY,YY,mo_slices[1],contour_lines,
-    cmap='seismic',vmax=abs(mo_list_xz).max(),vmin=-abs(mo_list_xz).max()) 
+    cmap='seismic',vmax=abs(mo_slices[1]).max(),vmin=-abs(mo_slices[1]).max()) 
     
     # atom locations
     pic2.scatter(xyz_c[0], xyz_c[2], marker=r"$ {} $".format('C'), c=color)
@@ -134,7 +138,7 @@ output_name='charges', comments=''):
     # figure 3
     pic3.contour(XX,YX,mo_slices[2],contour_lines,linewidths=0.5,colors='k')
     pic3.contourf(XX,YX,mo_slices[2],contour_lines,
-    cmap='seismic',vmax=abs(mo_list_yz).max(),vmin=-abs(mo_list_yz).max())  
+    cmap='seismic',vmax=abs(mo_slices[2]).max(),vmin=-abs(mo_slices[2]).max())  
     # atom locations
     pic3.scatter(xyz_c[1], xyz_c[2], marker=r"$ {} $".format('C'), c=color)
     pic3.scatter(xyz_n[1], xyz_n[2], marker=r"$ {} $".format('C'), c=color)
