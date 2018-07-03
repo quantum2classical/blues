@@ -7,6 +7,7 @@ try:
 except ImportError:
     import sys
     sys.path.append('C:\orbkit-cython')
+    import orbkit as ok
 from orbkit import read, grid, atomic_populations, options, main, extras
 from orbkit.output import pdb_creator ,xyz_creator
 from orbkit.display import init_display, display
