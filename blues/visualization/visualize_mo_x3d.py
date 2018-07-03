@@ -1,25 +1,15 @@
 from . import choose_calculate_mo
 from choose_calculate_mo import *
 
-def visualization(filename, selected_mo_string):
-    var = raw_input("Please enter something: ")
-    print "you entered", var
-
-    
-    
-    
-def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True, 
+def mo_to_visualize(contour1, contour2, notebook=True, 
                     opacity=0.3, scale_factor=0.5, wireframe=False,
-                    saved_image='my_mo.png',filename=None, before_homo=None, 
-                    after_homo=None ):
+                    saved_image='my_mo.png'):
     """
     x3d rendering can only be used in a Jupyter Notebook for now. If the user 
     only wants a .png, change notebook=False
     
     Parameters
     ---------
-    selected_mo: string, MO relative to HOMO user wants to view. Example, 
-        'HOMO-30','LUMO', 'HOMO+6'. Must be in orbital list.
         
     contour1: float < 1.0 for isosurface of one phase. Contour values will be
     based on max value of density. 
@@ -41,12 +31,14 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
     ---------
     x3d or png rendering of isosurface for both phases and atomic positions
     """
-
-    if density_done == False:
-        calculate_densities(filename, before_homo, after_homo, extend=2.0)
-    else:
-        pass
-
+    
+    # prompt user for variables
+    filename = raw_input('Enter molden filename in as a string')
+    before_homo = raw_input('Enter integer of first MO in the list (can be < 0)')
+    after_homo = raw_input('Enter integer of last MO in the list (can be < 0)')
+    calculate_densities(filename, before_homo, after_homo, extend=2.0)
+    
+    selected_mo_string = raw_input('selected MO out of your list you want to view. Example: HOMO-40, HOMO+13, LUMO')
 
     if notebook == True:
         # clear figure and re-initialize notebook with x3d for interactive,
@@ -96,7 +88,6 @@ def mo_to_visualize(selected_mo_string, contour1, contour2, notebook=True,
         pass
     
         if notebook == False:
-        # shows axes for png
         mlab.axes()
         mlab.options.offscreen = True
         mlab.savefig(figure=isosurf, filename=selected_mo_string+'.png')

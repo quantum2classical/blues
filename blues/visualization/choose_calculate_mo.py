@@ -1,18 +1,21 @@
 import numpy as np
 import pandas as pd
-import sys
-sys.path.append('C:\orbkit-cython')
 import os
+
+try:
+    import orbkit as ok
+except ImportError:
+    import sys
+    sys.path.append('C:\orbkit-cython')
 from orbkit import read, grid, atomic_populations, options, main, extras
 from orbkit.output import pdb_creator ,xyz_creator
 from orbkit.display import init_display, display
-import orbkit as ok
-import matplotlib.pyplot as plt
 
 # set up global 
 global density_done, atoms_done
 density_done = False
 atoms_done = False
+
 # this submodule should output:
 # 1. strings of the number of MOs
 # 2. a list of which MOs will be calculated
@@ -237,7 +240,7 @@ def calculate_densities(filename, before_homo, after_homo, extend=2.0,
     mo_list, mo_info = extras.calc_mo(
     read_file, orbital_string_input, numproc=numproc)
     
-    density_done = True
+    density_done == True
     return x, y, z, mo_list, mo_info
     
     

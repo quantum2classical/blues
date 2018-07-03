@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-
 from . import choose_calculate_mo
+from choose_calculate_mo import *
 from .choose_calculate_mo import calculate_densities, get_atom_positions, my_mo_list, density_done, atoms_done
 from .choose_calculate_mo import *
+import matplotlib.pyplot as plt
 
 
 def make_mesh_grid(selected_mo, filename=None, before_homo=None, 
@@ -12,7 +13,7 @@ after_homo=None, extend=2.0, output_name='charges', comments=''):
     ----------
     selected_mo: string, MO relative to HOMO user wants to view. Example, 
     'HOMO-30','LUMO', 'HOMO+6'. Must be in orbital list.
-    
+
     filename
     Returns
     ----------
@@ -59,7 +60,7 @@ after_homo=None, extend=2.0, output_name='charges', comments=''):
     
     mo_slices = [mo_list_xy, mo_list_xz, mo_list_yz]
     
-    return XZ, YZ, XY, YY, XX, YX, mo_slices, xyz
+    return XZ, YZ, XY, YY, XX, YX, mo_slices, xyz, mo_info
     
     
 def contour_plots(selected_mo, contour_lines=10, linewidth=0.5, cmap='seismic', 
@@ -85,11 +86,10 @@ output_name='charges', comments=''):
     # fontsize
     font = 16
     figsize=(6,16)
-    
     orbital_list, orbital_string_input = my_mo_list(filename, before_homo, after_homo)
     
     # get mesh, density slices, and atom locations
-    XZ, YZ, XY, YY, XX, YX, mo_slices, xyz = make_mesh_grid(selected_mo, 
+    XZ, YZ, XY, YY, XX, YX, mo_slices, xyz, mo_info = make_mesh_grid(selected_mo, 
     filename, before_homo, after_homo, extend, output_name='charges', comments='')
     
     # parse atom locations
