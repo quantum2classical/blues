@@ -22,3 +22,17 @@ $ source activate blues
 $ python setup.py install
 ```
 
+## Usage
+```python
+import blues
+
+# Pass any proper Molden file to the converter object when instantiated
+converter = blues.MoldenConverter("molecule.molden")
+
+## Convert to SMILES or InChI identifier strings
+# First call runs JANPA to get bond-order matrix and build molecule
+smiles = converter.tosmiles()
+
+# Second call is much faster and only needs to convert molecule to string
+inchi = converter.toinchi()
+```
