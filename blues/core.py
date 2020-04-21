@@ -61,7 +61,7 @@ class MoldenConverter:
             if self.inchi:
                 pass
             else:
-                self.inchi = Chem.MolToSmiles(self._molecule)
+                self.inchi = Chem.MolToInchi(self._molecule)
         return self.inchi
 
     def tolewis(self):
